@@ -138,6 +138,15 @@ namespace DroneSimulator
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LoadRoom"",
+                    ""type"": ""Button"",
+                    ""id"": ""ea1efc3d-7505-4111-92d4-bc4648093d27"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -195,6 +204,17 @@ namespace DroneSimulator
                     ""action"": ""LeftStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d558dcc9-c797-49c9-b84d-d6d9f659c77f"",
+                    ""path"": ""<XRController>{RightHand}/secondaryButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LoadRoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -208,6 +228,7 @@ namespace DroneSimulator
             m_Drone_Arm = m_Drone.FindAction("Arm", throwIfNotFound: true);
             m_Drone_Disarm = m_Drone.FindAction("Disarm", throwIfNotFound: true);
             m_Drone_ResetDrone = m_Drone.FindAction("ResetDrone", throwIfNotFound: true);
+            m_Drone_LoadRoom = m_Drone.FindAction("LoadRoom", throwIfNotFound: true);
         }
 
         ~@DroneInputActions()
@@ -293,6 +314,7 @@ namespace DroneSimulator
         private readonly InputAction m_Drone_Arm;
         private readonly InputAction m_Drone_Disarm;
         private readonly InputAction m_Drone_ResetDrone;
+        private readonly InputAction m_Drone_LoadRoom;
         /// <summary>
         /// Provides access to input actions defined in input action map "Drone".
         /// </summary>
@@ -324,6 +346,10 @@ namespace DroneSimulator
             /// Provides access to the underlying input action "Drone/ResetDrone".
             /// </summary>
             public InputAction @ResetDrone => m_Wrapper.m_Drone_ResetDrone;
+            /// <summary>
+            /// Provides access to the underlying input action "Drone/LoadRoom".
+            /// </summary>
+            public InputAction @LoadRoom => m_Wrapper.m_Drone_LoadRoom;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -365,6 +391,9 @@ namespace DroneSimulator
                 @ResetDrone.started += instance.OnResetDrone;
                 @ResetDrone.performed += instance.OnResetDrone;
                 @ResetDrone.canceled += instance.OnResetDrone;
+                @LoadRoom.started += instance.OnLoadRoom;
+                @LoadRoom.performed += instance.OnLoadRoom;
+                @LoadRoom.canceled += instance.OnLoadRoom;
             }
 
             /// <summary>
@@ -391,6 +420,9 @@ namespace DroneSimulator
                 @ResetDrone.started -= instance.OnResetDrone;
                 @ResetDrone.performed -= instance.OnResetDrone;
                 @ResetDrone.canceled -= instance.OnResetDrone;
+                @LoadRoom.started -= instance.OnLoadRoom;
+                @LoadRoom.performed -= instance.OnLoadRoom;
+                @LoadRoom.canceled -= instance.OnLoadRoom;
             }
 
             /// <summary>
@@ -466,6 +498,13 @@ namespace DroneSimulator
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnResetDrone(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "LoadRoom" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnLoadRoom(InputAction.CallbackContext context);
         }
     }
 }

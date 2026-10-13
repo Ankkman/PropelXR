@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d236b7d11115f2143951f1e14045df39, type: 3}
   m_Name: Android Settings
   m_EditorClassIdentifier: Unity.XR.Management::UnityEngine.XR.Management.XRGeneralSettings
-  m_LoaderManagerInstance: {fileID: -1626325159462664225}
+  m_Manager: {fileID: -1626325159462664225}
   m_InitManagerOnStart: 1
 --- !u!114 &-1626325159462664225
 MonoBehaviour:
@@ -43,10 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2dc886499c26824283350fa532d087d, type: 3}
   m_Name: XRGeneralSettingsPerBuildTarget
   m_EditorClassIdentifier: Unity.XR.Management.Editor::UnityEditor.XR.Management.XRGeneralSettingsPerBuildTarget
-  Keys: 0700000001000000
-  Values:
-  - {fileID: -2621456238651021655}
-  - {fileID: 969155451662809101}
+  Keys: 
+  Values: []
+  m_SettingsPerBuildTarget:
+  - buildTarget: 7
+    settings: {fileID: -2621456238651021655}
+  - buildTarget: 1
+    settings: {fileID: 969155451662809101}
 --- !u!114 &969155451662809101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,7 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d236b7d11115f2143951f1e14045df39, type: 3}
   m_Name: Standalone Settings
   m_EditorClassIdentifier: Unity.XR.Management::UnityEngine.XR.Management.XRGeneralSettings
-  m_LoaderManagerInstance: {fileID: 5704162536185591209}
+  m_Manager: {fileID: 5704162536185591209}
   m_InitManagerOnStart: 1
 --- !u!114 &5704162536185591209
 MonoBehaviour:
