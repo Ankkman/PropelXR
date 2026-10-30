@@ -138,15 +138,6 @@ namespace DroneSimulator
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""LoadRoom"",
-                    ""type"": ""Button"",
-                    ""id"": ""ea1efc3d-7505-4111-92d4-bc4648093d27"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -204,15 +195,32 @@ namespace DroneSimulator
                     ""action"": ""LeftStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
+                }
+            ]
+        },
+        {
+            ""name"": ""PropelXR_UI"",
+            ""id"": ""49bac2e2-e90c-4d92-ab8f-898aaa62c749"",
+            ""actions"": [
+                {
+                    ""name"": ""ToggleMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""de9032c8-7da3-4158-a3f0-f5f511d0251c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""d558dcc9-c797-49c9-b84d-d6d9f659c77f"",
+                    ""id"": ""7a610631-aea0-4de9-afb6-59fe8c1bc684"",
                     ""path"": ""<XRController>{RightHand}/secondaryButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""LoadRoom"",
+                    ""action"": ""ToggleMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -228,12 +236,15 @@ namespace DroneSimulator
             m_Drone_Arm = m_Drone.FindAction("Arm", throwIfNotFound: true);
             m_Drone_Disarm = m_Drone.FindAction("Disarm", throwIfNotFound: true);
             m_Drone_ResetDrone = m_Drone.FindAction("ResetDrone", throwIfNotFound: true);
-            m_Drone_LoadRoom = m_Drone.FindAction("LoadRoom", throwIfNotFound: true);
+            // PropelXR_UI
+            m_PropelXR_UI = asset.FindActionMap("PropelXR_UI", throwIfNotFound: true);
+            m_PropelXR_UI_ToggleMenu = m_PropelXR_UI.FindAction("ToggleMenu", throwIfNotFound: true);
         }
 
         ~@DroneInputActions()
         {
             UnityEngine.Debug.Assert(!m_Drone.enabled, "This will cause a leak and performance issues, DroneInputActions.Drone.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_PropelXR_UI.enabled, "This will cause a leak and performance issues, DroneInputActions.PropelXR_UI.Disable() has not been called.");
         }
 
         /// <summary>
@@ -314,7 +325,6 @@ namespace DroneSimulator
         private readonly InputAction m_Drone_Arm;
         private readonly InputAction m_Drone_Disarm;
         private readonly InputAction m_Drone_ResetDrone;
-        private readonly InputAction m_Drone_LoadRoom;
         /// <summary>
         /// Provides access to input actions defined in input action map "Drone".
         /// </summary>
@@ -346,10 +356,6 @@ namespace DroneSimulator
             /// Provides access to the underlying input action "Drone/ResetDrone".
             /// </summary>
             public InputAction @ResetDrone => m_Wrapper.m_Drone_ResetDrone;
-            /// <summary>
-            /// Provides access to the underlying input action "Drone/LoadRoom".
-            /// </summary>
-            public InputAction @LoadRoom => m_Wrapper.m_Drone_LoadRoom;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -391,9 +397,6 @@ namespace DroneSimulator
                 @ResetDrone.started += instance.OnResetDrone;
                 @ResetDrone.performed += instance.OnResetDrone;
                 @ResetDrone.canceled += instance.OnResetDrone;
-                @LoadRoom.started += instance.OnLoadRoom;
-                @LoadRoom.performed += instance.OnLoadRoom;
-                @LoadRoom.canceled += instance.OnLoadRoom;
             }
 
             /// <summary>
@@ -420,9 +423,6 @@ namespace DroneSimulator
                 @ResetDrone.started -= instance.OnResetDrone;
                 @ResetDrone.performed -= instance.OnResetDrone;
                 @ResetDrone.canceled -= instance.OnResetDrone;
-                @LoadRoom.started -= instance.OnLoadRoom;
-                @LoadRoom.performed -= instance.OnLoadRoom;
-                @LoadRoom.canceled -= instance.OnLoadRoom;
             }
 
             /// <summary>
@@ -456,6 +456,102 @@ namespace DroneSimulator
         /// Provides a new <see cref="DroneActions" /> instance referencing this action map.
         /// </summary>
         public DroneActions @Drone => new DroneActions(this);
+
+        // PropelXR_UI
+        private readonly InputActionMap m_PropelXR_UI;
+        private List<IPropelXR_UIActions> m_PropelXR_UIActionsCallbackInterfaces = new List<IPropelXR_UIActions>();
+        private readonly InputAction m_PropelXR_UI_ToggleMenu;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "PropelXR_UI".
+        /// </summary>
+        public struct PropelXR_UIActions
+        {
+            private @DroneInputActions m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public PropelXR_UIActions(@DroneInputActions wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "PropelXR_UI/ToggleMenu".
+            /// </summary>
+            public InputAction @ToggleMenu => m_Wrapper.m_PropelXR_UI_ToggleMenu;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_PropelXR_UI; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="PropelXR_UIActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(PropelXR_UIActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="PropelXR_UIActions" />
+            public void AddCallbacks(IPropelXR_UIActions instance)
+            {
+                if (instance == null || m_Wrapper.m_PropelXR_UIActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_PropelXR_UIActionsCallbackInterfaces.Add(instance);
+                @ToggleMenu.started += instance.OnToggleMenu;
+                @ToggleMenu.performed += instance.OnToggleMenu;
+                @ToggleMenu.canceled += instance.OnToggleMenu;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="PropelXR_UIActions" />
+            private void UnregisterCallbacks(IPropelXR_UIActions instance)
+            {
+                @ToggleMenu.started -= instance.OnToggleMenu;
+                @ToggleMenu.performed -= instance.OnToggleMenu;
+                @ToggleMenu.canceled -= instance.OnToggleMenu;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="PropelXR_UIActions.UnregisterCallbacks(IPropelXR_UIActions)" />.
+            /// </summary>
+            /// <seealso cref="PropelXR_UIActions.UnregisterCallbacks(IPropelXR_UIActions)" />
+            public void RemoveCallbacks(IPropelXR_UIActions instance)
+            {
+                if (m_Wrapper.m_PropelXR_UIActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="PropelXR_UIActions.AddCallbacks(IPropelXR_UIActions)" />
+            /// <seealso cref="PropelXR_UIActions.RemoveCallbacks(IPropelXR_UIActions)" />
+            /// <seealso cref="PropelXR_UIActions.UnregisterCallbacks(IPropelXR_UIActions)" />
+            public void SetCallbacks(IPropelXR_UIActions instance)
+            {
+                foreach (var item in m_Wrapper.m_PropelXR_UIActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_PropelXR_UIActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="PropelXR_UIActions" /> instance referencing this action map.
+        /// </summary>
+        public PropelXR_UIActions @PropelXR_UI => new PropelXR_UIActions(this);
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Drone" which allows adding and removing callbacks.
         /// </summary>
@@ -498,13 +594,21 @@ namespace DroneSimulator
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnResetDrone(InputAction.CallbackContext context);
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PropelXR_UI" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="PropelXR_UIActions.AddCallbacks(IPropelXR_UIActions)" />
+        /// <seealso cref="PropelXR_UIActions.RemoveCallbacks(IPropelXR_UIActions)" />
+        public interface IPropelXR_UIActions
+        {
             /// <summary>
-            /// Method invoked when associated input action "LoadRoom" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "ToggleMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnLoadRoom(InputAction.CallbackContext context);
+            void OnToggleMenu(InputAction.CallbackContext context);
         }
     }
 }

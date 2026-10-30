@@ -50,15 +50,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "LoadRoom",
-                    "type": "Button",
-                    "id": "ea1efc3d-7505-4111-92d4-bc4648093d27",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -116,15 +107,32 @@
                     "action": "LeftStick",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
+                }
+            ]
+        },
+        {
+            "name": "PropelXR_UI",
+            "id": "49bac2e2-e90c-4d92-ab8f-898aaa62c749",
+            "actions": [
+                {
+                    "name": "ToggleMenu",
+                    "type": "Button",
+                    "id": "de9032c8-7da3-4158-a3f0-f5f511d0251c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
                 {
                     "name": "",
-                    "id": "d558dcc9-c797-49c9-b84d-d6d9f659c77f",
+                    "id": "7a610631-aea0-4de9-afb6-59fe8c1bc684",
                     "path": "<XRController>{RightHand}/secondaryButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "LoadRoom",
+                    "action": "ToggleMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
